@@ -1,0 +1,23 @@
+batch_name = chkpt_$(Cluster)
+run_name = md_0_0.1
+# Checkpoint every 5 minutes
+checkpt_interval = 0.083
+
+container_image = osdf:///ospool/ap40/data/amber.lim/gromacs2026.3.sif
+
+shell = ./chkpt.sh $(run_name) $(checkpt_interval)
+
+transfer_input_files = charmm36-feb2026_cgenff-5.0.ff, chkpt.sh, $(run_name).mdp, npt.gro, npt.cpt, topol.top, posre.itp
+
+transfer_checkpoint_files = $(run_name).cpt, $(run_name).tpr, $(run_name).log, $(run_name).xtc, $(run_name).edr
+checkpoint_exit_code = 85
+
+log = logs/$(batch_name).log
+output = logs/$(batch_name).out
+error = logs/$(batch_name).err
+
+request_cpus = 4
+request_memory = 500 MB
+request_disk = 6 GB
+
+queue

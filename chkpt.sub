@@ -3,7 +3,7 @@ run_name = md_0_0.1
 # Checkpoint every 5 minutes
 checkpt_interval = 0.083
 
-container_image = osdf:///ospool/ap40/data/amber.lim/gromacs2026.3.sif
+container_image = osdf:///osg-public/containers/gromacs2026.3.sif
 
 shell = ./chkpt.sh $(run_name) $(checkpt_interval)
 

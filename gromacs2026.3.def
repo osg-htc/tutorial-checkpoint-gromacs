@@ -1,0 +1,37 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/cuda:13.4.3-cudnn-devel-ubuntu26.04
+
+%post
+   apt -y update \
+   && apt install -y --no-install-recommends \
+      build-essential \
+      cmake \
+      g++ \
+      wget \
+      curl \
+      tar \
+      git
+   apt clean
+   rm -rf /var/lib/apt/lists/*
+
+   # Install GROMACS
+   curl -O ftp://ftp.gromacs.org/gromacs/gromacs-2026.3.tar.gz
+   tar -xzf gromacs-2026.3.tar.gz
+   cd gromacs-2026.3
+   mkdir build
+   cd build
+   cmake .. \
+       -DCMAKE_INSTALL_PREFIX=/usr/local/gromacs \
+       -DGMX_SIMD=AVX2_256 \
+       -DGMXAPI=ON \
+       -DGMX_THREAD_MPI=ON \
+       -DGMX_GPU=CUDA \
+       -DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \
+       -DGMX_BUILD_OWN_FFTW=ON \
+       -DGMX_BUILD_HELP=OFF \
+       -DGMX_USE_RDTSCP=OFF \
+       -DGMX_INSTALL_LEGACY_API=ON \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DGMX_USE_RDTSCP=ON
+   make
+   make install
